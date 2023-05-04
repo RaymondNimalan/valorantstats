@@ -5,47 +5,42 @@ import { useState, useEffect } from 'react';
 import PlayerCard from './Components/PlayerCard';
 import NavBar from './Components/NavBar';
 import AgentsCard from './Components/AgentsCard';
+import MapCard from './Components/MapCard';
 
 const App = () => {
   const [agents, setAgents] = useState([]);
+  const [maps, setMaps] = useState([]);
 
   useEffect(() => {
     getAgents();
     console.log('agents from useEffect', agents);
+    console.log('maps', maps);
   }, []);
 
   async function getAgents() {
     try {
       console.log('hello from fetch request');
       const response = await axios.get('http://localhost:7653/agents');
-      const characters = await response.data.characters;
-      console.log('response characters', characters);
-      setAgents(characters);
+      const agentsData = await response.data.characters;
+      const mapData = await response.data.maps;
+      console.log('response data', response.data.maps);
+      console.log('response characters', agents);
+      setAgents(agentsData);
+      setMaps(mapData);
       return response;
     } catch (error) {
       console.log('error from axios request to backend', error);
     }
   }
   return (
-    <div className='App'>
+    <div className='App' style={{ display: 'flex', flexDirection: 'column' }}>
       <NavBar />
-      <header className='App-header'>
+      <div className='App-header'>
         <PlayerCard />
         <AgentsCard agents={agents} setAgents={setAgents} />
-        <img src={logo} className='App-logo' alt='logo' />
-        <button>Hello</button>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className='App-link'
-          href='https://reactjs.org'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Learn React
-        </a>
-      </header>
+        <MapCard maps={maps} setMaps={setMaps} />
+        34
+      </div>
     </div>
   );
 };
