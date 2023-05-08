@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import valorantAgents from './Data/agentDescriptions';
 
 const AgentsCard = ({ agents, setAgents }) => {
-  const [currentAgent, setCurrentAgent] = useState(null);
+  const [currentAgent, setCurrentAgent] = useState('Gekko');
   const [animateImage, setAnimateImage] = useState(true);
 
-  const SingleAgentCard = {
+  const AgentInfo = {
     display: 'flex',
-    padding: '25px',
     flexDirection: 'column',
     justifyContent: 'space-around',
   };
@@ -17,8 +16,11 @@ const AgentsCard = ({ agents, setAgents }) => {
 
   const ImageStyle = {
     display: 'flex',
-    width: '100%',
+    maxHeight: '500px',
+    maxWidth: '500px',
     height: '100%',
+    width: '100%',
+    padding: '10px',
     transform: animateImage ? 'translateY(0)' : 'translateY(100px)',
     opacity: animateImage ? 1 : 0,
     transition: 'transform 2s ease-in-out, opacity 2s ease-in-out',
@@ -26,23 +28,35 @@ const AgentsCard = ({ agents, setAgents }) => {
 
   useEffect(() => {
     console.log('currentAgent', currentAgent);
-  }, []);
+    //console.log('animateImage', animateImage);
+    //setAnimateImage(!animateImage);
+  }, [currentAgent]);
+
+  const handleSubmit = (newAgent) => {
+    console.log('animateImage1', animateImage);
+    setAnimateImage(!animateImage);
+    console.log('animateImage2', animateImage);
+    setTimeout(() => {
+      setCurrentAgent(newAgent);
+      setAnimateImage(true);
+    }, 2000);
+  };
 
   console.log('child comp', agents);
   return (
     <div
       style={{
         display: 'flex',
-        justifyContent: 'space-around',
         flexDirection: 'row',
-        height: '400px',
+        maxHeight: '500px',
+        height: '100%',
       }}
     >
       <div>Agents</div>
       <button onClick={() => setAnimateImage(!animateImage)}></button>
       <select
         style={SelectorStyle}
-        onChange={(e) => setCurrentAgent(e.target.value)}
+        onChange={(e) => handleSubmit(e.target.value)}
       >
         {agents.map((agent, index) => (
           <option key={index} value={agent.name}>
@@ -50,32 +64,27 @@ const AgentsCard = ({ agents, setAgents }) => {
           </option>
         ))}
       </select>
-      {/* <div style={ImageStyle}>
-        <img
-          src={valorantAgents[`${currentAgent}`].image}
-          alt=''
-          style={ImageStyle}
-        />
-      </div> */}
       {currentAgent ? (
-        <div>
-          <div style={ImageStyle}>
-            <img
-              src={valorantAgents[`${currentAgent}`].image}
-              alt=''
-              style={ImageStyle}
-            />
-          </div>
-          <div style={SingleAgentCard}>
-            <div style={{ padding: '20px' }}>{currentAgent}</div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+          }}
+        >
+          <img
+            src={valorantAgents[`${currentAgent}`].image}
+            alt=''
+            style={ImageStyle}
+          />
+          <div style={AgentInfo}>
+            <div>{currentAgent}</div>
             <div>{valorantAgents[`${currentAgent}`].role}</div>
             <div>{valorantAgents[`${currentAgent}`].bio}</div>
-            <div>{valorantAgents[`${currentAgent}`].image}</div>
             <div>{valorantAgents[`${currentAgent}`].abilities}</div>
           </div>
         </div>
       ) : (
-        <div>Choose an Agent!</div>
+        <div style={{ height: '500px' }}>Choose an Agent!</div>
       )}
     </div>
   );
