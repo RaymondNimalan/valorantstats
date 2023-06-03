@@ -4,13 +4,14 @@ import styled from 'styled-components';
 
 const AgentsContainer = styled.div`
   display: flex;
-  width: 100%;
-  flex-direction: row;
+  position: relative;
+  flex-direction: column;
+  top: 100px;
+  z-index: 101;
 `;
 
 const AgentCard = styled.div`
   display: flex;
-  width: 100%;
   flex-direction: row;
 `;
 
@@ -77,7 +78,7 @@ const AgentsCard = ({ agents, setAgents }) => {
 
   return (
     <AgentsContainer>
-      <button onClick={() => setAnimateImage(!animateImage)}></button>
+      {/* <button onClick={() => setAnimateImage(!animateImage)}></button> */}
       <select onChange={(e) => handleSubmit(e.target.value)}>
         {agents.map((agent, index) => (
           <option key={index} value={agent.name}>
@@ -105,7 +106,6 @@ const AgentsCard = ({ agents, setAgents }) => {
       ) : (
         <div style={{ height: '500px' }}>Choose an Agent!</div>
       )}
-      ;
     </AgentsContainer>
   );
 };
