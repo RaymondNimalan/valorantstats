@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -6,6 +5,17 @@ import PlayerCard from './Components/PlayerCard';
 import NavBar from './Components/NavBar';
 import AgentsCard from './Components/AgentsCard';
 import MapCard from './Components/MapCard';
+import AppRouter from './Routes';
+import Landing from './Components/Landing';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
 
 const App = () => {
   const [agents, setAgents] = useState([]);
@@ -23,25 +33,35 @@ const App = () => {
       const response = await axios.get('http://localhost:7653/agents');
       const agentsData = await response.data.characters;
       const mapData = await response.data.maps;
-      console.log('response data', response.data.maps);
-      console.log('response characters', agents);
-      setAgents(agentsData);
-      setMaps(mapData);
+      const fixedAgentData = await agentsData.filter(
+        (obj) => obj.name !== 'Null UI Data!'
+      );
+      const fixedMapData = await mapData.filter(
+        (obj) => obj.name !== 'The Range' && obj.name !== 'Null UI Data!'
+      );
+      setAgents(fixedAgentData);
+      setMaps(fixedMapData);
       return response;
     } catch (error) {
       console.log('error from axios request to backend', error);
     }
   }
   return (
-    <div className='App' style={{ display: 'flex', flexDirection: 'column' }}>
+    <AppContainer>
+      {/* <AppRouter /> */}
       <NavBar />
-      <div className='App-header'>
-        <PlayerCard />
-        <AgentsCard agents={agents} setAgents={setAgents} />
-        <MapCard maps={maps} setMaps={setMaps} />
-        34
-      </div>
-    </div>
+      <Routes>
+        <Route path='/' element={<Landing />} />
+        <Route
+          path='/maps'
+          element={<MapCard maps={maps} setMaps={setMaps} />}
+        />
+        <Route
+          path='/agents'
+          element={<AgentsCard agents={agents} setAgents={setAgents} />}
+        />
+      </Routes>
+    </AppContainer>
   );
 };
 
