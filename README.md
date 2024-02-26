@@ -1,4 +1,4 @@
-# Welcome to my Valorant web application!
+# Welcome to my Valorant Web Application!
 
 Check out all the different agents, maps, and weapons in Valorant! Valorant is a 5v5 first person shooter video game made by Riot Games. This app utilizes the Riot API to pull information about the game.
 
